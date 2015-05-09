@@ -1,0 +1,41 @@
+{
+  "name": "angular-ui-router-title",
+  "version": "0.0.0",
+  "description": "AngularJS module for updating browser title/history based on the current ui-router state.",
+  "main": "angular-ui-router-title.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nonplus/angular-ui-router-title.git"
+  },
+  "author": "Stepan Riha <github@nonplus.net>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nonplus/angular-ui-router-title/issues"
+  },
+  "homepage": "https://github.com/nonplus/angular-ui-router-title",
+  "devDependencies": {
+    "angular": "^1.3.15",
+    "angular-mocks": "^1.3.15",
+    "angular-ui-router": "^0.2.14",
+    "gulp": "^3.8.11",
+    "gulp-bump": "^0.3.0",
+    "gulp-filter": "^2.0.2",
+    "gulp-git": "^1.2.3",
+    "gulp-karma": "0.0.4",
+    "gulp-serve": "^0.3.1",
+    "gulp-tag-version": "^1.2.1",
+    "gulp-wrap": "^0.11.0",
+    "jasmine-core": "^2.3.2",
+    "karma": "^0.12.31",
+    "karma-chrome-launcher": "^0.1.8",
+    "karma-jasmine": "^0.3.5",
+    "lodash": "^3.8.0",
+    "open": "0.0.5"
+  }
+}
