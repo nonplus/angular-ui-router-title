@@ -1,57 +1,65 @@
 // dependencies
-var gulp = require('gulp'),
-	git = require('gulp-git'),
-	bump = require('gulp-bump'),
-	filter = require('gulp-filter'),
-	tag_version = require('gulp-tag-version');
+var gulp = require('gulp');
+var git = require('gulp-git');
+var bump = require('gulp-bump');
+var filter = require('gulp-filter');
+var tag_version = require('gulp-tag-version');
+var runSequence = require('run-sequence');
+var wrap = require("gulp-wrap");
+var gutil = require('gulp-util');
+var serve = require('gulp-serve');
+var karma = require('gulp-karma');
+var files = require('./files.conf');
+var testFiles = [].concat(files.libs, files.src, files.test);
 
-/**
- * Bumping version number and tagging the repository with it.
- * Please read http://semver.org/
- *
- * You can use the commands
- *
- *     gulp patch     # makes v0.1.0 → v0.1.1
- *     gulp feature   # makes v0.1.1 → v0.2.0
- *     gulp release   # makes v0.2.1 → v1.0.0
- *
- * To bump the version numbers accordingly after you did a patch,
- * introduced a feature or made a backwards-incompatible release.
- */
+var port = 8082;
 
-function inc(importance) {
-	// get all the files to bump version in
-	return gulp.src(['./package.json', './bower.json'])
-		// bump the version number in those files
-		.pipe(bump({type: importance}))
-		// save it back to filesystem
-		.pipe(gulp.dest('./'))
-		// make release build
-		.pipe(build)
-		// commit the changed version number
-		.pipe(git.commit('bumps package version'))
+gulp.task('bump-version', function () {
+	return gulp.src(['./bower.json', './package.json'])
+		.pipe(bump({type: "patch"}).on('error', gutil.log))
+		.pipe(gulp.dest('./'));
+});
 
-		// read only one file to get the version number
-		.pipe(filter('package.json'))
-		// **tag it in the repository**
+gulp.task('commit-changes', function () {
+	return gulp.src('.')
+		.pipe(git.commit('[Prerelease] Bumped version number', {args: '-a'}));
+});
+
+gulp.task('tag-version', function() {
+	return gulp.src('package.json')
 		.pipe(tag_version());
-}
+});
 
-gulp.task('patch', function() { return inc('patch'); });
-gulp.task('feature', function() { return inc('minor'); });
-gulp.task('release', function() { return inc('major'); });
+gulp.task('push-changes', function (cb) {
+	git.push('origin', 'master', cb);
+});
 
-gulp.task('build', build);
+gulp.task('release', function (callback) {
+	runSequence(
+		'bump-version',
+		'build',
+		'commit-changes',
+		'tag-version',
+		function (error) {
+			if (error) {
+				console.log(error.message);
+			} else {
+				console.log('RELEASE FINISHED SUCCESSFULLY');
+			}
+			callback(error);
+		});
+});
 
-function build() {
-	var wrap = require("gulp-wrap");
+gulp.task('tag-version', function() {
+	return gulp.src('./package.json')
+		.pipe(tag_version());
+});
+
+gulp.task('build', function() {
 	return gulp.src("src/angular-ui-router-title.js")
 		.pipe(wrap({ src: './build.txt' }, { info: require('./package.json') }))
 		.pipe(gulp.dest('.'));
-}
-
-var serve = require('gulp-serve');
-var port = 8082;
+});
 
 gulp.task('serve', serve({
 	root: __dirname,
@@ -72,10 +80,6 @@ gulp.task('serve', serve({
 gulp.task('demo', ['serve'], function() {
 	require('open')('http://localhost:' + port);
 });
-
-var karma = require('gulp-karma');
-var files = require('./files.conf');
-var testFiles = [].concat(files.libs, files.src, files.test);
 
 gulp.task('test', function() {
 	// Be sure to return the stream
