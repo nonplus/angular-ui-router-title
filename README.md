@@ -1,2 +1,107 @@
-# angular-ui-router-title
+angular-ui-router-title
+=========================
+
 AngularJS module for updating browser title/history based on the current ui-router state.
+
+Motivation
+----------
+
+Using ui-router states with `url` configurations enables browser history support and bookmarking of application state.
+It is important that the title in the browser history/bookmark represent the application state so that the user can tell
+where she's navigating to.
+
+This module provides a `$title` variable on the `$rootScope` that is populated based on the `$title` value resolved in `$state.$current` (or one of its parent states).
+
+Loading the Module
+------------------
+
+This module declares itself as `ui.router.title`, so it can be declared as a dependency of your application as normal:
+
+```javascript
+var app = angular.module('myApp', ['ng', 'ui.router.title']);
+```
+
+Using the $title in the page title
+----------------------------------
+
+The page title, bookmark title and browser history is sat from the contents of the `<title>` tag.
+
+```html
+<html ng-app>
+<head>
+  <title ng-bind="$title + ' - My Application'">My Application</title>
+</head>
+...
+```
+
+Specifying the $title in the state definition
+---------------------------------------------
+
+A state defines its title by declaring a `$title` value in its `resolve` block.  It's a good idea for the `$title` to include information from the current state, so it may need to inject the `$stateParam` or another value that was resolved from them.
+
+```javascript
+$stateProvider
+  .state('home', {
+    ...
+    resolve: {
+      // Constant title
+      $title: function() { return 'Home'; }
+    }
+  })
+  .state('about', {
+    url: '/about',
+    ...
+    resolve: {
+      // Constant title
+      $title: function() { return 'About'; }
+    }
+  })
+  .state('contacts', {
+    url: '/contacts',
+    ...
+    resolve: {
+      // List of contacts
+      contacts: ['Contacts', function(Contacts) {
+        // Use Contacts service to retrieve list
+        return Contacts.query();
+      }],
+      // Dynamic title showing number of contacts
+      $title: ['contacts', function(contacts) {
+        return 'Contacts (' + contacts.length + ')';
+      }]
+    }
+  })
+  .state('contact', {
+    url: '/contact/:contactId',
+    ...
+    resolve: {
+      // Single contact
+      contact: ['Contacts', '$stateParams', function(Contacts, $stateParams) {
+        // Use Contacts service to retrieve a contact
+        return Contacts.get({ id: $stateParams.contactId });
+      }],
+      // Dynamic title showing the name of contact
+      $title: ['contact', function(contact) {
+        return contact.name;
+      }]
+    }
+  })
+  .state('contact.edit', {
+    url: '/edit',
+    ...
+    resolve: {
+      // Dynamic title appending to parent state's title
+      $title: ['$title', function($title) {
+        return $title + " (edit)";
+      }]
+    }
+  })
+```
+
+Copyright & License
+-------------------
+
+Copyright 2015 Stepan Riha. All Rights Reserved.
+
+This may be redistributed under the MIT licence. For the full license terms, see the LICENSE file which
+should be alongside this readme.
