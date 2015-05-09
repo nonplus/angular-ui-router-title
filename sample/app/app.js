@@ -3,7 +3,8 @@ angular.module('uiRouterSample', [
   'uiRouterSample.contacts',
   'uiRouterSample.contacts.service',
   'uiRouterSample.utils.service',
-  'ui.router', 
+  'ui.router',
+  'ui.router.title',
   'ngAnimate'
 ])
 
@@ -57,6 +58,11 @@ angular.module('uiRouterSample', [
           // Use a url of "/" to set a states as the "index".
           url: "/",
 
+          resolve: {
+            // Static $title
+            $title: function() { return "Home"; }
+          },
+
           // Example of an inline template string. By default, templates
           // will populate the ui-view within the parent state's template.
           // For top level states, like this one, the parent template is
@@ -76,6 +82,11 @@ angular.module('uiRouterSample', [
 
         .state('about', {
           url: '/about',
+
+          resolve: {
+            // Static $title
+            $title: function() { return "About"; }
+          },
 
           // Showing off how you could return a promise from templateProvider
           templateProvider: ['$timeout',

@@ -14,6 +14,9 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-animate.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.14/angular-ui-router.min.js"></script>
 
+    <!-- Added reference to module -->
+    <script src="../angular-ui-router-title.js"></script>
+
     <!-- app.js declares the uiRouterSample module and adds items to $rootScope, and defines
          the "home" and "about" states
     -->
@@ -30,8 +33,8 @@
     <script src="app/contacts/contacts-service.js"></script>
     <script src="common/utils/utils-service.js"></script>
 
-    <!-- could easily use a custom property of the state here instead of 'name' -->
-    <title ng-bind="$state.current.name + ' - ui-router'">ui-router</title>
+    <!-- Use $rootScope.$title which corresponds to the current state -->
+    <title ng-bind="$title + ' - ui-router-title'">ui-router-title</title>
   </head>
   <body>
     <div class="navbar navbar-fixed-top">
@@ -65,7 +68,8 @@
 
     <hr>
     <pre>
-      <!-- Here's some values to keep an eye on in the sample in order to understand $state and $stateParams -->
+      <!-- Here's some values to keep an eye on in the sample in order to understand $title, $state and $stateParams -->
+      <b style="background: darkblue; color: lightgoldenrodyellow; padding: 0.25em 0.75em; margin: -0.75em">$title = {{$title}}</b>
       $state = {{$state.current.name}}
       $stateParams = {{$stateParams}}
       $state full url = {{ $state.$current.url.source }}

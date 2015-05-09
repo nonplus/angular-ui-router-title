@@ -29,6 +29,10 @@ angular.module('uiRouterSample.contacts', [
           // resolved before instantiation. Non-promise return values are considered
           // to be resolved immediately.
           resolve: {
+            // Dynamic $title using resolved 'contacts'.
+            $title: ["contacts", function(contacts) {
+              return "Contacts (" + contacts.length + ")";
+            }],
             contacts: ['contacts',
               function( contacts){
                 return contacts.all();
@@ -97,6 +101,16 @@ angular.module('uiRouterSample.contacts', [
           // and the $stateParams object becomes { contactId: 42 }.
           url: '/{contactId:[0-9]{1,4}}',
 
+          resolve: {
+            // Dynamic $title using resolved 'contact' name.
+            $title: ['contact', function(contact) {
+              return contact.name;
+            }],
+            contact: ['utils', 'contacts', '$stateParams', function(utils, contacts, $stateParams) {
+              return utils.findById(contacts, $stateParams.contactId);
+            }]
+          },
+
           // If there is more than a single ui-view in the parent template, or you would
           // like to target a ui-view from even higher up the state tree, you can use the
           // views object to configure multiple views. Each view can get its own template,
@@ -111,9 +125,9 @@ angular.module('uiRouterSample.contacts', [
             // So this one is targeting the unnamed view within the parent state's template.
             '': {
               templateUrl: 'app/contacts/contacts.detail.html',
-              controller: ['$scope', '$stateParams', 'utils',
-                function (  $scope,   $stateParams,   utils) {
-                  $scope.contact = utils.findById($scope.contacts, $stateParams.contactId);
+              controller: ['$scope', 'contact',
+                function (  $scope,   contact) {
+                  $scope.contact = contact;
                 }]
             },
 
@@ -148,6 +162,18 @@ angular.module('uiRouterSample.contacts', [
           // '/contacts/{contactId}/item/:itemId'. We are using both types of parameters
           // in the same url, but they behave identically.
           url: '/item/:itemId',
+
+          resolve: {
+            // Dynamic $title using parent state's $title and resolved 'item' type.
+            $title: ["$title", 'item', function($title, item) {
+              return $title + " (" + item.type + ")";
+            }],
+            item:      ['$stateParams', 'contact', 'utils',
+              function ( $stateParams,   contact,   utils) {
+                return utils.findById(contact.items, $stateParams.itemId);
+              }]
+          },
+
           views: {
 
             // This is targeting the unnamed ui-view within the parent state 'contact.detail'
@@ -155,9 +181,9 @@ angular.module('uiRouterSample.contacts', [
             // We could instead just set templateUrl and controller outside of the view obj.
             '': {
               templateUrl: 'app/contacts/contacts.detail.item.html',
-              controller: ['$scope', '$stateParams', '$state', 'utils',
-                function (  $scope,   $stateParams,   $state,   utils) {
-                  $scope.item = utils.findById($scope.contact.items, $stateParams.itemId);
+              controller: ['$scope', '$stateParams', '$state', 'item',
+                function (  $scope,   $stateParams,   $state,   item) {
+                  $scope.item = item;
 
                   $scope.edit = function () {
                     // Here we show off go's ability to navigate to a relative state. Using '^' to go upwards
