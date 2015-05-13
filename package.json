@@ -1,6 +1,6 @@
 {
   "name": "angular-ui-router-title",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "AngularJS module for updating browser title/history based on the current ui-router state.",
   "main": "angular-ui-router-title.js",
   "directories": {
