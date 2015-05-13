@@ -12,6 +12,8 @@ where she's navigating to.
 
 This module provides a `$title` variable on the `$rootScope` that is populated based on the `$title` value resolved in `$state.$current` (or one of its parent states).
 
+The module also provides a `$breadcrumbs` array that is populated based on the `$title` of `$state.$current` and its parent states.
+
 Loading the Module
 ------------------
 
@@ -32,6 +34,24 @@ The page title, bookmark title and browser history is sat from the contents of t
   <title ng-bind="$title + ' - My Application'">My Application</title>
 </head>
 ...
+```
+
+Using the $breadcrumbs
+----------------------
+
+The `$breadcrumbs` array contains objects, one for each state that resolves a `$title` value.  Each entry contains:
+
+  * `title`: $title value of this state
+  * `state`: name of the state
+  * `stateParams`: $stateParams of the state.
+
+```html
+<ol class="breadcrumb">
+	<li ng-repeat="crumb in $breadcrumbs" ng-class="{ 'active' : $last }">
+		<a ng-if="!$last" href="{{$state.href(crumb.state, crumb.stateParams)}}">{{crumb.title}}</a>
+		<span ng-if="$last">{{crumb.title}}</span>
+	</li>
+</ol>
 ```
 
 Specifying the $title in the state definition

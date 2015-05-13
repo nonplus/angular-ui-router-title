@@ -69,7 +69,9 @@
     <hr>
     <pre>
       <!-- Here's some values to keep an eye on in the sample in order to understand $title, $state and $stateParams -->
-      <b style="background: darkblue; color: lightgoldenrodyellow; padding: 0.25em 0.75em; margin: -0.75em">$title = {{$title}}</b>
+      <b style="background: lightyellow; color: darkred; padding: 0.25em 0.75em; margin: -0.75em">$title = {{$title}}</b>
+      <div style="background: lightyellow; color: darkred; padding: 0.25em 0.75em; margin: -0.75em 36px">$breadcrumbs = [
+<span ng-repeat="crumb in $breadcrumbs">    {{crumb}}<br/></span>]</div>
       $state = {{$state.current.name}}
       $stateParams = {{$stateParams}}
       $state full url = {{ $state.$current.url.source }}
