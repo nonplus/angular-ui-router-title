@@ -14,6 +14,18 @@ This module provides a `$title` variable on the `$rootScope` that is populated b
 
 The module also provides a `$breadcrumbs` array that is populated based on the `$title` of `$state.$current` and its parent states.
 
+Installing the Module
+---------------------
+Installation can be done through bower:
+``` shell
+bower install angular-ui-router-title
+```
+
+In your page add:
+```html
+  <script src="bower_components/angular-ui-router-title/angular-ui-router-title.js"></script>
+```
+
 Loading the Module
 ------------------
 
