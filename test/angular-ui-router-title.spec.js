@@ -21,16 +21,17 @@ describe('on $stateChangeSuccess', function() {
 
 		}));
 
-		it("should not set $rootScope.$title", inject(function($state, $rootScope, $timeout) {
+		it("should delete $rootScope.$title", inject(function($state, $rootScope, $timeout) {
 			$rootScope.$title = 'originalTitle';
 
 			$state.go('parent');
 			$timeout.flush(); $rootScope.$digest();
-			expect($rootScope.$title).toEqual('originalTitle');
+			expect($rootScope.$title).toEqual(undefined);
 
+			$rootScope.$title = 'originalTitle';
 			$state.go('parent.child');
 			$timeout.flush(); $rootScope.$digest();
-			expect($rootScope.$title).toEqual('originalTitle');
+			expect($rootScope.$title).toEqual(undefined);
 		}));
 
 	}); // when no $title
