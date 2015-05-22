@@ -10,7 +10,7 @@ Using ui-router states with `url` configurations enables browser history support
 It is important that the title in the browser history/bookmark represent the application state so that the user can tell
 where she's navigating to.
 
-This module provides a `$title` variable on the `$rootScope` that is populated based on the `$title` value resolved in `$state.$current` (or one of its parent states).
+This module provides a `$title` variable on the `$rootScope` that is populated based on the `$title` value resolved in `$state.$current` (or one of its parent states).  If the current state doesn't resolve a `$title`, then `$rootScope.$title` will be `undefined`.
 
 The module also provides a `$breadcrumbs` array that is populated based on the `$title` of `$state.$current` and its parent states.
 
@@ -43,7 +43,7 @@ The page title, bookmark title and browser history is sat from the contents of t
 ```html
 <html ng-app>
 <head>
-  <title ng-bind="$title + ' - My Application'">My Application</title>
+  <title ng-bind="($title || 'Home') + ' - My Application'">My Application</title>
 </head>
 ...
 ```
