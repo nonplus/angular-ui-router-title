@@ -4,11 +4,9 @@ angular.module("ui.router.title", ["ui.router"])
 
 		$rootScope.$on("$stateChangeSuccess", function() {
 			var title = getTitleValue($state.$current.locals.globals.$title);
-			if(title) {
-				$timeout(function() {
-					$rootScope.$title = title;
-				});
-			}
+			$timeout(function() {
+				$rootScope.$title = title;
+			});
 
 			$rootScope.$breadcrumbs = [];
 			var state = $state.$current;

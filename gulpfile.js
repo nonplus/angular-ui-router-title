@@ -20,7 +20,7 @@ gulp.task('bump-version', function () {
 		.pipe(gulp.dest('./'));
 });
 
-gulp.task('commit-changes', function () {
+gulp.task('commit-changes', ['test'], function () {
 	return gulp.src('.')
 		.pipe(git.commit('[Prerelease] Bumped version number', {args: '-a'}));
 });
@@ -34,7 +34,7 @@ gulp.task('push-changes', function (cb) {
 	git.push('origin', 'master', cb);
 });
 
-gulp.task('release', function (callback) {
+gulp.task('release', ['test'], function (callback) {
 	runSequence(
 		'bump-version',
 		'build',
