@@ -3,7 +3,7 @@
  *
  * @link https://github.com/nonplus/angular-ui-router-title
  *
- * @license angular-ui-router-title v0.0.3
+ * @license angular-ui-router-title v0.0.4
  * (c) Copyright Stepan Riha <github@nonplus.net>
  * License MIT
  */
@@ -16,11 +16,9 @@ angular.module("ui.router.title", ["ui.router"])
 
 		$rootScope.$on("$stateChangeSuccess", function() {
 			var title = getTitleValue($state.$current.locals.globals.$title);
-			if(title) {
-				$timeout(function() {
-					$rootScope.$title = title;
-				});
-			}
+			$timeout(function() {
+				$rootScope.$title = title;
+			});
 
 			$rootScope.$breadcrumbs = [];
 			var state = $state.$current;
