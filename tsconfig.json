@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "module": "umd",
+        "target": "es5",
+        "moduleResolution": "node",
+        "noImplicitAny": false,
+        "sourceMap": false,
+        "lib": ["es5", "dom"]
+    }
+}

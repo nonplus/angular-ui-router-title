@@ -4,6 +4,7 @@ var git = require('gulp-git');
 var bump = require('gulp-bump');
 var filter = require('gulp-filter');
 var tag_version = require('gulp-tag-version');
+var tslint = require("gulp-tslint");
 var runSequence = require('run-sequence');
 var wrap = require("gulp-wrap");
 var gutil = require('gulp-util');
@@ -34,7 +35,7 @@ gulp.task('push-changes', function (cb) {
 	git.push('origin', 'master', cb);
 });
 
-gulp.task('release', ['test'], function (callback) {
+gulp.task('release', ['ts-compile', 'test'], function (callback) {
 	runSequence(
 		'bump-version',
 		'build',
@@ -55,9 +56,17 @@ gulp.task('tag-version', function() {
 		.pipe(tag_version());
 });
 
-gulp.task('build', function() {
+gulp.task('build', ['ts-compile'], function() {
 	return gulp.src("src/angular-ui-router-title.js")
 		.pipe(wrap({ src: './build.txt' }, { info: require('./package.json') }))
+		.pipe(gulp.dest('.'));
+});
+
+gulp.task('ts-compile', function() {
+	var ts = require('gulp-typescript');
+	var tsProject = ts.createProject('tsconfig.json');
+	return tsProject.src(['src/**/*.ts', 'test/**/*.ts'])
+		.pipe(tsProject()).js
 		.pipe(gulp.dest('.'));
 });
 
@@ -100,4 +109,15 @@ gulp.task('watch', function() {
 			configFile: 'karma.conf.js',
 			action: 'watch'
 		}));
+});
+
+gulp.task('lint', function () {
+	return gulp.src([
+		"./src/**/*.ts",
+		"./test/**/*.ts"
+	])
+		.pipe(tslint({
+			formatter: "verbose"
+		}))
+		.pipe(tslint.report());
 });
