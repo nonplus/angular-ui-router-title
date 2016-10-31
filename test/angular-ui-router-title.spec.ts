@@ -39,13 +39,13 @@ describe('on $stateChangeSuccess', function() {
 			$rootScope: ng.IRootScopeService,
 			$timeout: ng.ITimeoutService
 		) {
-			$rootScope.$breadcrumbs = [{ title: "title", state: "state", stateParams: {} }];
+			$rootScope.$breadcrumbs = [{ title: "title", state: "state", stateParams: null }];
 
 			$state.go('parent');
 			$timeout.flush(); $rootScope.$digest();
 			expect($rootScope.$breadcrumbs).toEqual([]);
 
-			$rootScope.$breadcrumbs = [{ title: "title", state: "state", stateParams: {} }];
+			$rootScope.$breadcrumbs = [{ title: "title", state: "state", stateParams: null }];
 
 			$state.go('parent.child');
 			$timeout.flush(); $rootScope.$digest();
@@ -126,7 +126,7 @@ describe('on $stateChangeSuccess', function() {
 			$rootScope: ng.IRootScopeService,
 			$timeout: ng.ITimeoutService
 		) {
-			$rootScope.$breadcrumbs = [{ title: "title", state: "state", stateParams: {} }];
+			$rootScope.$breadcrumbs = [{ title: "title", state: "state", stateParams: null }];
 
 			parentTitle = 'parent-title 1';
 			$state.go('parent');
@@ -225,7 +225,7 @@ describe('on $stateChangeSuccess', function() {
 			$rootScope: ng.IRootScopeService,
 			$timeout: ng.ITimeoutService
 		) {
-			$rootScope.$breadcrumbs = [{ title: "title", state: "state", stateParams: {} }];
+			$rootScope.$breadcrumbs = [{ title: "title", state: "state", stateParams: null }];
 
 			$state.go('parent', { param1: "param1" });
 			$timeout.flush(); $rootScope.$digest();

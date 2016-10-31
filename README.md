@@ -1,6 +1,8 @@
 angular-ui-router-title
 =========================
 
+[![Build Status](https://travis-ci.org/nonplus/angular-ui-router-title.svg?branch=master)](https://travis-ci.org/nonplus/angular-ui-router-title)
+
 AngularJS module for updating browser title/history based on the current ui-router state.
 
 Motivation
