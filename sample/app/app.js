@@ -23,8 +23,12 @@ angular.module('uiRouterSample', [
 )
 
 .config(
-  [          '$stateProvider', '$urlRouterProvider',
-    function ($stateProvider,   $urlRouterProvider) {
+  [          '$stateProvider', '$urlRouterProvider', '$titleProvider',
+    function ($stateProvider,   $urlRouterProvider,   $titleProvider) {
+
+      $titleProvider.documentTitle(function($title) {
+          return $title + ' - ui-router-title';
+      });
 
       /////////////////////////////
       // Redirects and Otherwise //

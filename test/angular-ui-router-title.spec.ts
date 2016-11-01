@@ -259,4 +259,132 @@ describe('on $stateChangeSuccess', function() {
 
 	}); // when $title is a value
 
+	describe("when documentTitle configured", function() {
+
+		function documentTitle(title) {
+			return title + " Document Title";
+		}
+
+		beforeEach(mock.module(function($stateProvider: ng.ui.IStateProvider, $titleProvider: ng.ui.ITitleProvider) {
+
+			$stateProvider
+				.state('parent', {
+					params: {
+						param1: null
+					},
+					resolve: {
+						$title: () => 'parent-title'
+					}
+				})
+				.state('parent.child', {
+				})
+				.state('parent.child.grandchild', {
+					params: {
+						param2: null
+					},
+					resolve: {
+						$title: () => 'grandchild-title'
+					}
+				})
+			;
+
+			$titleProvider.documentTitle(function ($rootScope) {
+				return documentTitle($rootScope.$title);
+			});
+
+		}));
+
+		it("should set document.title and <title> to documentTitle($title)", mock.inject(function(
+			$state: ng.ui.IStateService,
+			$rootScope: ng.IRootScopeService,
+			$timeout: ng.ITimeoutService
+		) {
+			$rootScope.$breadcrumbs = [{ title: "title", state: "state", stateParams: null }];
+			for (let eltTitle of [].slice.call(document.getElementsByTagName("title"))) {
+				eltTitle.parentElement.removeChild(eltTitle);
+			}
+			document.title = "Initial Title";
+
+			$state.go('parent', { param1: "param1" });
+			$timeout.flush(); $rootScope.$digest();
+			assertTitle('parent-title');
+
+			$state.go('parent.child', { param1: "param1" });
+			$timeout.flush(); $rootScope.$digest();
+			assertTitle('parent-title');
+
+			$state.go('parent.child.grandchild', { param1: "param1", param2: "param2" });
+			$timeout.flush(); $rootScope.$digest();
+			assertTitle('grandchild-title');
+		}));
+
+		function assertTitle($title) {
+			let expecte = documentTitle($title);
+			expect(document.title).toEqual(expecte);
+			expect((document.getElementsByTagName("title")[0] as HTMLTitleElement).text).toEqual(expecte);
+		}
+
+	}); // when documentTitle configured
+
+	describe("when documentTitle not configured", function() {
+
+		beforeEach(mock.module(function($stateProvider: ng.ui.IStateProvider, $titleProvider: ng.ui.ITitleProvider) {
+
+			$stateProvider
+				.state('parent', {
+					params: {
+						param1: null
+					},
+					resolve: {
+						$title: () => 'parent-title'
+					}
+				})
+				.state('parent.child', {
+				})
+				.state('parent.child.grandchild', {
+					params: {
+						param2: null
+					},
+					resolve: {
+						$title: () => 'grandchild-title'
+					}
+				})
+			;
+
+			$titleProvider.documentTitle(null);
+
+		}));
+
+		it("should set document.title and <title> to $title", mock.inject(function(
+			$state: ng.ui.IStateService,
+			$rootScope: ng.IRootScopeService,
+			$timeout: ng.ITimeoutService
+		) {
+			$rootScope.$breadcrumbs = [{ title: "title", state: "state", stateParams: null }];
+			for (let eltTitle of [].slice.call(document.getElementsByTagName("title"))) {
+				eltTitle.parentElement.removeChild(eltTitle);
+			}
+			document.title = "Initial Title";
+
+			$state.go('parent', { param1: "param1" });
+			$timeout.flush(); $rootScope.$digest();
+			assertTitle('parent-title');
+
+			$state.go('parent.child', { param1: "param1" });
+			$timeout.flush(); $rootScope.$digest();
+			assertTitle('parent-title');
+
+			$state.go('parent.child.grandchild', { param1: "param1", param2: "param2" });
+			$timeout.flush(); $rootScope.$digest();
+			assertTitle('grandchild-title');
+		}));
+
+		function assertTitle($title) {
+			let expected = $title;
+			expect(document.title).toEqual(expected);
+			expect((document.getElementsByTagName("title")[0] as HTMLTitleElement).text).toEqual(expected);
+		}
+
+	}); // when documentTitle not configured
+
 }); // on $stateChangeSuccess
