@@ -3,7 +3,7 @@
  *
  * @link https://github.com/nonplus/angular-ui-router-title
  *
- * @license angular-ui-router-title v0.1.0
+ * @license angular-ui-router-title v0.1.1
  * (c) Copyright Stepan Riha <github@nonplus.net>
  * License MIT
  */
