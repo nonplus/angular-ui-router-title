@@ -2,6 +2,7 @@ angular-ui-router-title
 =========================
 
 [![Build Status](https://travis-ci.org/nonplus/angular-ui-router-title.svg?branch=master)](https://travis-ci.org/nonplus/angular-ui-router-title)
+[![CDNJS version](https://img.shields.io/cdnjs/v/angular-ui-router-title.svg)](https://cdnjs.com/libraries/angular-ui-router-title)
 
 AngularJS module for updating browser title/history based on the current ui-router state.
 
